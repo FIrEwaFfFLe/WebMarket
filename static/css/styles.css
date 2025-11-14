@@ -1,0 +1,705 @@
+/* ========== Общие сбросы ========== */
+* { box-sizing: border-box; }
+html,body { height:100%; margin:0; font-family: Inter, Arial, sans-serif; color:#111; background:#f6f7fb; }
+a { color:inherit; text-decoration:none; }
+img { max-width:100%; display:block; }
+
+/* ========== Сетка страницы ========== */
+.header-inner, .footer-inner { max-width:1200px; margin:0 auto; padding:12px; display:flex; align-items:center; justify-content:space-between; }
+.main-content, .category-main, .compare-main { max-width:1200px; margin:20px auto; padding:16px; }
+
+/* ========== Логотип (все требования) ========== */
+.logo { display:flex; align-items:center; justify-content:center; gap:12px; padding:10px; margin:0; transition: all 0.25s ease; text-decoration:none; z-index:1001; }
+.logo.small { padding:6px; }
+.logo-img { max-width:300px; width:auto; height:60px; object-fit:contain; border-radius:8px; box-shadow: 0 6px 18px rgba(0,0,0,0.45); transition: all 0.25s ease; }
+.logo-text { font-weight:800; font-size:1.25rem; background: linear-gradient(90deg,#ff5f6d,#ffc371); -webkit-background-clip:text; background-clip:text; color:transparent; }
+
+/* hover: немного увеличивает размер + плавный переход */
+.logo:hover .logo-img { transform: scale(1.04); }
+.logo:hover .logo-text { transform: scale(1.02); }
+
+/* Бонус — пульсация логотипа */
+@keyframes pulseLogo {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+.logo { animation: pulseLogo 6s ease-in-out infinite; }
+
+/* ========== Header & Slideshow ========== */
+.site-header { background:linear-gradient(180deg,#0f172a,#111827); color:white; padding-bottom:18px; position:relative; overflow:visible; }
+.header-inner { align-items:center; gap:16px; }
+
+/* Слайдшоу */
+/* ======= Слайдшоу (radio-based, без JS) ======= */
+.slideshow {
+  width:100%;
+  max-width:1200px;
+  margin:18px auto 0;
+  position:relative;
+  height:220px;
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 10px 30px rgba(2,6,23,0.3);
+}
+
+/* скрыть радиокнопки, они управляют состоянием */
+.slideshow input[type="radio"] { display:none; }
+
+/* базовые стили для слайда — скрыт по умолчанию */
+.slide {
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  padding:24px;
+  opacity:0;
+  visibility:hidden;
+  transform: translateY(10px);
+  transition: opacity .45s ease, transform .45s ease;
+  border-radius:16px;
+  z-index:1;
+}
+.slide-content { text-align:left; max-width:650px; backdrop-filter: blur(0.5px); }
+.slide h2 { margin:0 0 8px; font-size:1.6rem; }
+.slide p { margin:0; }
+
+/* фоны для конкретных слайдов — используем явные классы s1/s2/s3 */
+.slide.s1 { background: linear-gradient(135deg, rgba(255,80,80,0.3), rgba(200,60,180,0.25)), url('images/slide1-bg.jpg') center/cover no-repeat; }
+.slide.s2 { background: linear-gradient(135deg, rgba(20,80,255,0.25), rgba(90,20,255,0.18)), url('images/slide2-bg.jpg') center/cover no-repeat; }
+.slide.s3 { background: linear-gradient(135deg, rgba(0,200,180,0.2), rgba(0,100,255,0.15)), url('images/slide3-bg.jpg') center/cover no-repeat; }
+
+/* показываем нужный слайд когда соответствующая радиокнопка выбрана */
+#r1:checked ~ .s1,
+#r2:checked ~ .s2,
+#r3:checked ~ .s3 {
+  opacity:1;
+  visibility:visible;
+  transform: translateY(0);
+  z-index:2;
+}
+
+/* Навигационные кнопки (labels) — визуально как раньше */
+.slide-nav { position:absolute; right:14px; bottom:12px; display:flex; gap:8px; z-index:20; }
+.nav-btn {
+  background:rgba(255,255,255,0.15);
+  color:white;
+  padding:6px 9px;
+  border-radius:50%;
+  font-size:12px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  transition:background .15s, transform .12s;
+  border:1px solid rgba(255,255,255,0.06);
+  cursor:pointer;
+  user-select:none;
+}
+.nav-btn:hover { background:rgba(255,255,255,0.28); transform: translateY(-2px); }
+
+/* подсветка выбранной кнопки */
+#r1:checked ~ .slide-nav label[for="r1"],
+#r2:checked ~ .slide-nav label[for="r2"],
+#r3:checked ~ .slide-nav label[for="r3"] {
+  background:rgba(255,255,255,0.9);
+  color:#111;
+  box-shadow:0 6px 18px rgba(0,0,0,0.12);
+}
+
+/* адаптив — сохраняем прежние сокращения высоты */
+@media(max-width:900px) {
+  .slideshow { height:160px; }
+}
+
+
+/* ========== Левое меню (всегда прижато к левому краю, всегда поверх) ========== */
+.left-menu { position:fixed; left:12px; top:140px; width:200px; background:linear-gradient(180deg,#ffffff, #f3f4f6); padding:12px; border-radius:12px; z-index:2000; box-shadow:0 10px 30px rgba(2,6,23,0.08); }
+.left-menu .lang-switch { font-size:0.9rem; margin-bottom:12px; }
+.left-menu .categories { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px; }
+.cat-item { display:flex; align-items:center; gap:10px; padding:10px; border-radius:8px; color:#0f172a; font-weight:600; transition: background .18s ease, transform .12s ease; text-decoration:none; }
+.cat-item:hover { background:#eef2ff; transform:translateX(4px); box-shadow:0 6px 12px rgba(5,10,40,0.04); }
+
+/* дополнительные текстовые параметры */
+.cat-item { font-size:1rem; letter-spacing:0.2px; text-transform:none; text-indent:0; line-height:1.3; }
+.cat-icon { font-size:1.1rem; }
+
+/* ========== Контент: статьи (3 стиля) ========== */
+.articles { display:grid; gap:20px; grid-template-columns: 1fr; }
+
+/* Статья 1: карточка с изображением слева и текстом справа, градиент от синего к фиолетовому */
+.article-1 { display:flex; gap:1px; background:linear-gradient(90deg,#1e3c72,#2a1f6f); color:white; padding:16px; border-radius:15px; box-shadow:0 8px 22px rgba(24,29,61,0.25); align-items:center; }
+.article-1 .article-image { width:40%; }
+.article-1 .article-image img { border-radius:12px; width: 70%;}
+.article-1 .article-body { width:60%; }
+.article-1 h3 { font-family: "Times New Roman", serif; font-size:1.5rem; margin:0 0 8px; text-align: justify;}
+.article-1 p { line-height:1.6; text-align:justify; margin:0; }
+
+/* Статья 2: заголовок без засечек, белый фон с цветной рамкой слева; бейдж popular в правом верхнем */
+.article-2 { position:relative; background:white; border-left:6px solid #ff6b6b; padding:18px; border-radius:10px; box-shadow:0 6px 16px rgba(2,6,23,0.04); }
+.article-2 h3 { font-family:Arial, sans-serif; margin:0 0 8px; }
+.badge { position:absolute; right:12px; top:8px; background:#ffcc00; color:#111; padding:6px 10px; border-radius:6px; font-weight:700; font-size:0.85rem; }
+
+/* Статья 3: светлый полупрозрачный фон поверх текстуры, цитата, кастом маркеры, кнопка */
+.article-3 { background:rgba(255,255,255,0.93) url('../images/texture.jpg'); padding:18px; border-radius:12px; background-size:cover; background-blend-mode: overlay; }
+.article-3 .quote { font-style:italic; font-size:1.05rem; margin:0 0 12px; padding-left:12px; border-left:4px solid #ccc; color:#2b2b2b; }
+.custom-list { list-style:none; padding:0; margin:10px 0; }
+.custom-list li { position:relative; padding-left:26px; margin-bottom:8px; }
+.custom-list li:before { content:"✦"; position:absolute; left:0; top:0; color:#ff6b6b; font-weight:700; }
+.read-more { display:inline-block; margin-top:10px; padding:8px 14px; border-radius:8px; background:#111827; color:white; transition: transform .15s, box-shadow .15s; }
+.read-more:hover { transform:translateY(-3px); box-shadow:0 8px 20px rgba(17,24,39,0.2); }
+
+/* ========== Нижняя часть сайта (спонсоры) ========== */
+.site-footer { margin-top:36px; background:#0b1220; color:white; padding:18px 0; }
+.site-footer .sponsors { display:flex; gap:18px; align-items:flex-start; }
+.sponsor-column { display:flex; flex-direction:column; gap:8px; }
+.sponsor img { width:86px; height:44px; object-fit:contain; opacity:0.95; filter:grayscale(0.1); }
+
+/* ========== Категория: заголовки ========== */
+.category-header { padding:18px 0; color:white; }
+.category-header.supercars-header { background: linear-gradient(90deg,#0b1020,#0b1a2b); }
+.category-header.sportscars-header { background: linear-gradient(90deg,#0b1020,#0b1a2b); }
+.category-header.motorcycles-header { background: linear-gradient(90deg,#0b1020,#0b1a2b); }
+.category-title { display:flex; align-items:center; gap:12px; margin:0 16px; font-size:1.6rem; }
+.category-title .count { font-size:0.9rem; color:#d1d5db; margin-left:8px; }
+
+/* ========== Фильтры ========== */
+.filters-top { background:rgba(255,255,255,0.98); margin:12px 0; padding:12px; border-radius:12px; box-shadow:0 8px 20px rgba(8,12,24,0.04); }
+.filters { display:flex; gap:18px; flex-wrap:wrap; align-items:center; }
+.filter-group label { display:block; font-weight:700; margin-bottom:6px; color:#0f172a; }
+.price-range { display:flex; gap:8px; }
+.price-btn { padding:8px 10px; border-radius:8px; border:1px solid #e6e9ef; background:white; cursor:pointer; transition:transform .12s, box-shadow .12s; }
+.price-btn:hover { transform:translateY(-3px); box-shadow:0 8px 18px rgba(2,6,23,0.06); }
+.brands .brand { display:inline-block; margin-right:8px; padding:6px 10px; border-radius:8px; background:#eef2ff; cursor:pointer; }
+.rating-filter { font-size:1.05rem; }
+
+/* Мобильный вид: фильтры слева — переключение через медиа-query */
+@media(max-width:900px) {
+  .left-menu { position:static; width:auto; top:auto; margin:12px; }
+  .filters { flex-direction:column; align-items:stretch; }
+}
+
+/* ========== Переключение вида (сетка/список) ========== */
+/* реализовано через чекбокс (в HTML просто чекбокс) — CSS реагирует на checked */
+.view-toggle { margin:12px 0; }
+#view-list:checked ~ .product-grid,
+#view-list-2:checked ~ .product-grid,
+#view-list-3:checked ~ .product-grid {
+  display:block;
+}
+.product-grid { display:grid; gap:18px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); align-items:start; }
+
+/* Список (при отмеченном чекбоксе сработает, если checkbox расположен перед grid в DOM) */
+/* Для простоты я использую класс .product-grid responsive: если чекбокс checked, ставьте класс .list-view вручную — в этом статическом варианте, оставлю стили для карточки-с-шириной */
+.product-grid.list-view { display:block; }
+
+/* ========== Карточки товаров ========== */
+.product-card { display:block; background:white; border-radius:10px; padding:12px; box-shadow:0 6px 18px rgba(8,12,24,0.06); min-width:250px; transition: transform .18s ease, box-shadow .18s ease; color:inherit; }
+.product-card .card-image { height:160px; overflow:hidden; border-radius:8px; display:flex; align-items:center; justify-content:center; background:#f7f7fb; margin-bottom:10px; }
+.product-card .card-image img { width:100%; height:100%; object-fit:cover; }
+.product-card:hover { transform: translateY(-6px); box-shadow:0 18px 40px rgba(8,12,24,0.12); }
+.product-title { margin:6px 0; font-size:1.05rem; font-weight:700; }
+.price { color:#0b7; font-weight:800; margin:6px 0; }
+.stock { color:#6b7280; }
+
+/* Хит продаж — отличается в оформлении */
+.product-card.bestseller { border:2px solid #ffcc00; background:linear-gradient(180deg,#fffaf0,#ffffff); }
+.product-card.bestseller .product-title::after { content:" Хит"; color:#ff6b6b; font-size:0.85rem; margin-left:6px; }
+
+/* Пагинация */
+.pagination { display:flex; gap:8px; align-items:center; justify-content:center; margin:20px 0; }
+.pagination .page { padding:8px 10px; border-radius:8px; background:white; box-shadow:0 6px 16px rgba(0,0,0,0.04); }
+.pagination .page.active { background:#111827; color:white; }
+
+/* ========== Страница товара: галерея (радио-кнопки) ========== */
+.product-main { display:flex; gap:28px; padding:20px; flex-wrap:wrap; }
+.gallery { flex:1 1 480px; max-width:720px; position:relative; }
+.gallery-slides { position:relative; height:420px; border-radius:12px; overflow:hidden; background:#111; }
+.gslide { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity .35s ease, transform .35s ease; }
+.gslide img { width:100%; height:100%; object-fit:cover; transform-origin:center center; transition: transform .35s ease; }
+.gslide:hover img { transform:scale(1.05); } /* эффект приближения при наведении */
+
+.gallery input[type="radio"] { display:none; }
+/* Когда соответствующий радиобаттон выбран — показываем нужный слайд */
+#g1:checked ~ .gallery-slides .g1,
+#g2:checked ~ .gallery-slides .g2,
+#g3:checked ~ .gallery-slides .g3,
+#g4:checked ~ .gallery-slides .g4,
+#g1b:checked ~ .gallery-slides .g1b,
+#g2b:checked ~ .gallery-slides .g2b,
+#g3b:checked ~ .gallery-slides .g3b,
+#g4b:checked ~ .gallery-slides .g4b,
+#g1c:checked ~ .gallery-slides .g1c,
+#g2c:checked ~ .gallery-slides .g2c,
+#g1d:checked ~ .gallery-slides .g1d,
+#g2d:checked ~ .gallery-slides .g2d,
+#g1e:checked ~ .gallery-slides .g1e,
+#g2e:checked ~ .gallery-slides .g2e,
+#g1f:checked ~ .gallery-slides .g1f,
+#g2f:checked ~ .gallery-slides .g2f {
+  opacity:1; z-index:2;
+}
+
+/* Индикаторы под галереей */
+.gallery-dots { display:flex; gap:8px; justify-content:center; margin-top:12px; }
+.dot { width:12px; height:12px; border-radius:50%; background:rgba(0,0,0,0.12); display:inline-block; border:2px solid rgba(255,255,255,0.6); cursor:pointer; }
+.gallery input[type="radio"]#g1:checked ~ .gallery-dots label[for="g1"],
+.gallery input[type="radio"]#g2:checked ~ .gallery-dots label[for="g2"],
+.gallery input[type="radio"]#g3:checked ~ .gallery-dots label[for="g3"] { background:#111; }
+.gallery input[type="radio"]#g4:checked ~ .gallery-dots label[for="g4"] { background:#111; }
+
+/* Информация о товаре справа */
+.product-info { flex:1 1 360px; background: rgba(255,255,255,0.95); padding:18px; border-radius:12px; box-shadow:0 10px 30px rgba(2,6,23,0.04); }
+.laser-title { font-family: 'Arial Black', "Trebuchet MS", sans-serif; font-size:1.35rem; letter-spacing:0.6px; color:#111; text-shadow:
+   1px 1px 0 #fff, -1px -1px 0 #0000001a; /* визуализация лазерной гравировки */
+}
+.price-big { font-size:1.6rem; margin:8px 0 12px; color:#0b7; font-weight:900; }
+
+/* ========== Compare page: "таблица" через grid (удобно для подсветки колонки) ========== */
+.compare-main { padding:22px; }
+.compare-table { display:grid; grid-template-columns: 220px repeat(3, 1fr); gap:0; border-radius:12px; overflow:hidden; border:1px solid rgba(0,0,0,0.06); }
+/* Каждая колонка — вертикальный стек */
+.compare-col { background:white; padding:12px; border-right:1px solid rgba(0,0,0,0.04); }
+.compare-col.params-col { background:#f3f4f6; }
+.compare-head { font-weight:800; padding:8px; border-bottom:1px solid rgba(0,0,0,0.04); display:flex; align-items:center; gap:10px; }
+.compare-row { padding:12px 8px; border-bottom:1px solid rgba(0,0,0,0.04); }
+.compare-row.center { text-align:center; }
+.compare-row.price { font-weight:900; font-size:1.05rem; color:#b99a3b; }
+.thumb { width:56px; height:40px; object-fit:cover; border-radius:8px; margin-right:8px; }
+
+/* Чередование строк через nth-child для читабельности */
+.compare-col .compare-row:nth-child(odd) { background:rgba(250,250,250,0.6); }
+.compare-col .compare-row:nth-child(even) { background:transparent; }
+
+/* Вертикальные разделители светлые; углы у таблицы скруглены (через родителя). */
+.compare-table { border-radius:12px; overflow:hidden; }
+
+/* При наведении на колонку подсветим её */
+.product-col:hover { background:linear-gradient(180deg, rgba(255,255,255,1), rgba(245,247,250,1)); box-shadow: inset 0 0 0 9999px rgba(255,248,220,0.0); transition: background .12s; }
+.product-col:hover .compare-head, .product-col:hover .compare-row { background:rgba(255,255,255,0.98); }
+
+/* Цвет товара с наименьшей ценой — бледно-золотой (класс best-price на колонке) */
+.compare-col.best-price { background: linear-gradient(180deg, rgba(255,250,235,0.9), rgba(255,249,230,0.7)); }
+
+/* Выравнивания: параметры слева, числа — по центру (см. .center) */
+/* Скругленные углы таблицы заданы у .compare-table */
+
+/* ========== Адаптив ========== */
+@media(max-width:900px){
+  .product-main { flex-direction:column; }
+  .left-menu { position:static; width:100%; top:auto; left:auto; margin:10px 0; }
+  .slideshow { height:160px; }
+  .gallery-slides { height:320px; }
+  .compare-table { grid-template-columns: 1fr; }
+  .compare-col { border-right:none; border-bottom:1px solid rgba(0,0,0,0.05); }
+}
+
+
+/* ========== Личный кабинет / account.html ========== */
+/* Размещение основного контейнера относительно фиксированного left-menu */
+.account-main {
+  margin: 20px 24px 60px 240px; /* оставляем место под левое меню (200px + отступ) */
+  max-width: calc(100% - 300px);
+  transition: margin .18s ease;
+}
+@media (max-width:900px) {
+  .account-main { margin: 12px; max-width: 100%; }
+}
+
+/* Внутренний контейнер (центруем содержимое) */
+.account-inner { max-width:1100px; margin:0 auto; }
+
+/* Профиль (карточка) */
+.account-header { display:flex; gap:18px; align-items:flex-start; justify-content:space-between; margin-bottom:18px; flex-wrap:wrap; }
+.profile-card { display:flex; gap:18px; align-items:center; background:linear-gradient(180deg, #ffffff, #fbfcff); padding:14px; border-radius:12px; box-shadow: 0 10px 26px rgba(8,12,24,0.06); min-width:0; flex:1 1 auto; }
+.avatar-wrap { position:relative; width:110px; flex:0 0 110px; display:flex; flex-direction:column; align-items:center; gap:8px; }
+.avatar { width:96px; height:96px; border-radius:50%; object-fit:cover; border:6px solid #fff; box-shadow:0 8px 18px rgba(2,6,23,0.08); }
+.edit-avatar { font-size:0.85rem; background:#111827; color:white; padding:6px 10px; border-radius:8px; text-decoration:none; }
+.profile-info { flex:1 1 auto; min-width:0; }
+.profile-name { margin:0 0 6px; font-size:1.3rem; }
+.profile-email { margin:0 0 10px; color:#6b7280; }
+.profile-stats { display:flex; gap:12px; margin-top:8px; }
+.stat { background:linear-gradient(180deg,#fff,#f9fafb); padding:8px 12px; border-radius:8px; box-shadow:0 6px 14px rgba(2,6,23,0.03); text-align:center; min-width:86px; }
+.stat-num { font-weight:900; font-size:1.15rem; }
+.stat-label { font-size:0.82rem; color:#6b7280; }
+
+/* Действия аккаунта (кнопки справа) */
+.account-actions { display:flex; gap:10px; align-items:center; margin-left:18px; }
+.action-btn { padding:10px 14px; border-radius:10px; background:linear-gradient(90deg,#111827,#1b2430); color:white; font-weight:700; text-decoration:none; box-shadow:0 8px 20px rgba(2,6,23,0.12); }
+.action-btn.ghost { background:transparent; color:#111827; border:1px solid rgba(2,6,23,0.06); }
+
+/* Табы (на основе радиокнопок) */
+.account-tabs { background:transparent; margin-top:6px; }
+.account-tabs input[type="radio"] { display:none; }
+
+/* Навигация табов */
+.tabs-nav { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px; }
+.tabs-nav label {
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 12px;
+  border-radius:10px;
+  background:linear-gradient(180deg,#ffffff,#f8fafc);
+  border:1px solid rgba(2,6,23,0.04);
+  cursor:pointer;
+  font-weight:700;
+}
+.tabs-nav label:hover { transform:translateY(-3px); box-shadow:0 12px 28px rgba(2,6,23,0.06); transition:all .18s ease; }
+
+/* Контейнер содержимого табов */
+.tabs-content { background:transparent; }
+
+/* Скрываем панели по умолчанию; показываем панель по checked радио */
+.tab-panel { display:none; background:transparent; padding:12px 0 28px; border-radius:10px; }
+#tab-overview:checked ~ .tabs-nav label[for="tab-overview"],
+#tab-orders:checked ~ .tabs-nav label[for="tab-orders"],
+#tab-saved:checked ~ .tabs-nav label[for="tab-saved"],
+#tab-payments:checked ~ .tabs-nav label[for="tab-payments"],
+#tab-addresses:checked ~ .tabs-nav label[for="tab-addresses"],
+#tab-security:checked ~ .tabs-nav label[for="tab-security"] {
+  background: linear-gradient(90deg,#111827,#0f172a);
+  color:white;
+  box-shadow:0 12px 30px rgba(2,6,23,0.16);
+}
+
+/* Отображение панелей при выборе */
+#tab-overview:checked ~ .tabs-content #panel-overview,
+#tab-orders:checked ~ .tabs-content #panel-orders,
+#tab-saved:checked ~ .tabs-content #panel-saved,
+#tab-payments:checked ~ .tabs-content #panel-payments,
+#tab-addresses:checked ~ .tabs-content #panel-addresses,
+#tab-security:checked ~ .tabs-content #panel-security {
+  display:block;
+}
+
+/* Quick links (карточки в обзоре) */
+.quick-links { display:flex; gap:12px; margin-top:12px; flex-wrap:wrap; }
+.quick-card { display:block; padding:12px; border-radius:10px; background:white; min-width:160px; text-decoration:none; color:inherit; box-shadow:0 8px 20px rgba(2,6,23,0.04); }
+.quick-title { font-weight:800; }
+.quick-sub { color:#6b7280; font-size:0.9rem; }
+
+/* Список заказов */
+.order-list { display:flex; flex-direction:column; gap:12px; margin-top:8px; }
+.order-card { background:white; border-radius:10px; padding:12px; box-shadow:0 10px 26px rgba(8,12,24,0.04); }
+.order-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.order-body { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+.order-thumb { width:120px; height:72px; border-radius:8px; overflow:hidden; background:#f7f7fb; display:flex; align-items:center; justify-content:center; }
+.order-thumb img { width:100%; height:100%; object-fit:cover; }
+.order-info { flex:1 1 auto; min-width:180px; }
+.order-title { font-weight:800; margin-bottom:6px; }
+.order-meta { color:#6b7280; font-size:0.92rem; }
+.order-actions { display:flex; gap:8px; align-items:center; }
+
+/* Сетка избранного переиспользует product-grid (уже есть), но можно настроить */
+.saved-grid .product-card { min-width:210px; }
+
+/* Формы в кабинете */
+.form-card { background:white; padding:14px; border-radius:10px; box-shadow:0 10px 26px rgba(8,12,24,0.04); margin-top:12px; }
+.form-row { display:block; margin-bottom:12px; }
+.form-row span { display:block; font-weight:700; margin-bottom:6px; color:#0f172a; }
+.form-row input[type="text"],
+.form-row input[type="password"],
+.form-row input[type="email"] {
+  width:100%; padding:10px 12px; border:1px solid #e6e9ef; border-radius:8px; background:#fff; outline:none;
+}
+.form-grid { display:grid; gap:12px; grid-template-columns: 1fr 140px; }
+
+/* Кнопки форм */
+.form-actions { display:flex; gap:10px; align-items:center; margin-top:8px; }
+.btn { padding:8px 12px; border-radius:10px; background:#111827; color:white; text-decoration:none; display:inline-block; font-weight:700; border:none; cursor:pointer; }
+.btn.ghost { background:transparent; color:#111827; border:1px solid rgba(2,6,23,0.06); }
+
+/* Адреса */
+.addresses { display:grid; gap:12px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); margin-top:12px; }
+.address-card { background:white; padding:12px; border-radius:10px; box-shadow:0 10px 26px rgba(8,12,24,0.04); display:flex; flex-direction:column; gap:8px; }
+.address-head { display:flex; justify-content:space-between; align-items:center; }
+.address-meta { color:#6b7280; font-size:0.9rem; }
+
+/* Небольшие подсказки */
+.muted { color:#6b7280; font-size:0.95rem; }
+
+/* Подвал кабинета */
+.account-footer { margin-top:18px; padding:12px 0; color:#6b7280; }
+
+/* Небольшая адаптивность: если экран меньше, делаем профиль вертикальным */
+@media(max-width:700px) {
+  .account-header { flex-direction:column; align-items:stretch; }
+  .profile-card { width:100%; }
+  .account-actions { margin-left:0; justify-content:flex-start; }
+}
+
+
+/* =================== Дополнения для supercars.html =================== */
+/* Результат/счётчик (маленькая подсказка) */
+.filters-top .muted { font-weight:700; color:#0f172a; }
+
+/* Настройки сетки товаров (адаптивно) — использует твой уже существующий .product-grid */
+.product-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  align-items: start;
+}
+
+/* Обязательные параметры карточки (повтор/точная настройка, если нужно) */
+.product-card {
+  display: block;
+  background: white;
+  border-radius: 10px;
+  padding: 12px;
+  box-shadow: 0 6px 18px rgba(8,12,24,0.06);
+  min-width: 250px;
+  transition: transform .18s ease, box-shadow .18s ease;
+  color: inherit;
+  text-decoration: none;
+  overflow: hidden;
+}
+
+/* hover: подъём и усиление тени */
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 48px rgba(8,12,24,0.14);
+}
+
+/* структура внутри карточки: изображение + тело */
+.product-card .card-image {
+  height: 160px;
+  overflow: hidden;
+  border-radius: 8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: #f7f7fb;
+  margin-bottom: 10px;
+}
+.product-card .card-image img { width:100%; height:100%; object-fit:cover; }
+
+/* текстовая часть */
+.product-card .card-body { padding: 6px 0 0 0; }
+.product-title { margin:6px 0; font-size:1.05rem; font-weight:700; }
+.price { color:#0b7; font-weight:800; margin:6px 0; }
+.stock { color:#6b7280; }
+
+/* отличие для хит-продаж — более выраженная окантовка */
+.product-card.bestseller {
+  border: 2px solid #ffcc00;
+  background: linear-gradient(180deg,#fffaf0,#ffffff);
+}
+
+/* =================== LIST VIEW (при checked #view-list) ===================
+   важно: в html #view-list находится перед .product-grid, поэтому селектор работает */
+#view-list:checked ~ #product-grid {
+  display: block;
+}
+
+/* карточки в списочном виде — горизонтально: картинка слева и контент справа */
+#view-list:checked ~ #product-grid .product-card {
+  display:flex;
+  gap:18px;
+  align-items:center;
+  padding:14px;
+}
+#view-list:checked ~ #product-grid .card-image {
+  width: 320px;
+  height: 180px;
+  flex: 0 0 320px;
+  margin-bottom: 0;
+  border-radius: 10px;
+}
+#view-list:checked ~ #product-grid .product-card .card-body {
+  padding: 0;
+}
+#view-list:checked ~ #product-grid .product-title { margin:0 0 6px 0; }
+
+/* В списочном виде хит-продаж — выделяется слева */
+#view-list:checked ~ #product-grid .product-card.bestseller {
+  border-left: 6px solid #ffcc00;
+  background: linear-gradient(180deg,#fffaf0,#ffffff);
+}
+
+/* небольшая адаптивность: на узких экранах список превращается обратно в вертикальные карточки */
+@media(max-width:700px) {
+  #view-list:checked ~ #product-grid .product-card {
+    flex-direction: column;
+  }
+  #view-list:checked ~ #product-grid .card-image {
+    width:100%;
+    height:160px;
+    flex: 0 0 auto;
+  }
+}
+
+/* Стили для фильтров на мобильных — уже в твоём CSS есть .filters @media, но добавим небольшой отступ */
+@media(max-width:900px) {
+  .filters-top { margin: 8px; padding:10px; }
+  .filters { gap:12px; }
+}
+
+
+/* ======= Layout: всегда держать футер внизу ======= */
+html, body {
+  height: 100%;
+}
+
+/* делаем body колонкой: header + main + footer */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* на всякий случай */
+}
+
+/* основной контент должен растягиваться, чтобы толкать футер вниз */
+main, .main-content, .category-main {
+  flex: 1 0 auto;
+}
+
+/* футер остаётся в потоке под контентом */
+.site-footer {
+  flex-shrink: 0;
+}
+
+
+/* ========== Расширение основной колонки (чуть шире) ========== */
+/* Увеличиваем ширину хедера категории и основной колонки только на страницах категории */
+.category-header .header-inner,
+.category-main {
+  max-width: 1400px; /* было 1200px — стало чуть шире */
+  margin: 0 auto;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+/* На узких экранах оставляем прежнее */
+@media (max-width: 900px) {
+  .category-header .header-inner,
+  .category-main { max-width: 100%; padding-left: 12px; padding-right: 12px; }
+}
+
+/* ========== Красивый select (обёртка + стрелка) ========== */
+.select-wrap {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+}
+.select-wrap select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding: 10px 38px 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #e6e9ef;
+  background: #ffffff;
+  box-shadow: 0 6px 16px rgba(2,6,23,0.04);
+  font-weight:700;
+  cursor: pointer;
+  min-width: 150px;
+}
+/* стрелка (псевдо) */
+.select-wrap::after{
+  content: "";
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #111827;
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+/* при фокусе на select — лёгкая подсветка */
+.select-wrap select:focus {
+  outline: none;
+  box-shadow: 0 8px 22px rgba(2,6,23,0.12);
+  border-color: #cbd5e1;
+}
+
+/* ========== Красивый toggle (свитч) ========== */
+.view-toggle .toggle {
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  cursor: pointer;
+  user-select:none;
+  font-weight:700;
+  color: #0f172a;
+}
+
+/* трек для свитча */
+.view-toggle .toggle .toggle-track{
+  width:44px;
+  height:24px;
+  border-radius:999px;
+  background: linear-gradient(180deg,#f1f5f9,#ffffff);
+  border:1px solid rgba(2,6,23,0.06);
+  display:inline-flex;
+  align-items:center;
+  padding:3px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+  transition: background .18s ease, box-shadow .18s ease;
+}
+
+/* кружок */
+.view-toggle .toggle .toggle-thumb{
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  background: #111827;
+  box-shadow: 0 6px 14px rgba(2,6,23,0.18);
+  transform: translateX(0);
+  transition: transform .18s ease, background .18s ease;
+}
+
+/* метка справа от свитча */
+.view-toggle .toggle .toggle-label {
+  font-size:0.95rem;
+  color:#0f172a;
+}
+
+/* Когда чекбокс отмечен — передаём состояние на label (input стоит перед .filters-top) */
+#view-list:checked + .filters-top .view-toggle .toggle .toggle-track {
+  background: linear-gradient(90deg,#111827,#1b2430);
+  border-color: rgba(0,0,0,0.08);
+}
+#view-list:checked + .filters-top .view-toggle .toggle .toggle-thumb {
+  transform: translateX(20px);
+  background: #ffd166;
+  box-shadow: 0 8px 20px rgba(221,139,0,0.18);
+}
+#view-list:checked + .filters-top .view-toggle .toggle .toggle-label {
+  color: #111;
+}
+
+/* тонкая а11y-подсказка — role="switch" aria-checked не меняется автоматически, можно обновить через JS при желании */
+
+/* ========== Стили для списка/сеток — небольшие корректировки видимости ========== */
+/* чтобы переключение выглядело плавно */
+#view-list:checked ~ #product-grid .product-card {
+  transition: all .18s ease;
+}
+
+/* (остальные правила list-view уже есть у тебя; выше мы обеспечили рабочий, визуально приятный свитч) */
+/* ========== Autoplay / accessibility tweaks for slideshow ========== */
+/* Подсветка фокуса на точках навигации — полезно для клавиатурных пользователей */
+.slide-nav label {
+  outline: none;
+  cursor: pointer;
+  transition: box-shadow .12s ease, transform .08s ease;
+}
+.slide-nav label:focus {
+  box-shadow: 0 0 0 6px rgba(59,130,246,0.12);
+  transform: translateY(-2px);
+}
+
+/* Убедимся, что секция слайдшоу может получать фокус и не получает дефолтный outline */
+.slideshow:focus {
+  outline: none;
+}
+
+/* Немного сгладим смену слайдов (в дополнение к существующему transition) */
+.slide { will-change: opacity, transform; }
