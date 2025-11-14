@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Вход - EliteDrive</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/index_icon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-inner">
+            <a class="logo" href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="EliteDrive Logo" class="logo-img">
+                <strong class="logo-text">EliteDrive</strong>
+            </a>
+        </div>
+    </header>
+
+    <main style="max-width: 400px; margin: 40px auto; padding: 0 20px;">
+        <h1>Вход в EliteDrive</h1>
+        <div>
+            <form class="login_form" method="post">
+                <div style="margin-bottom: 15px;">
+                    <input type="email" class="form-control" id="email" placeholder="Введите адрес почты" name="email" style="width: 100%; padding: 10px; margin: 5px 0;">
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <input type="password" class="form-control" id="password" placeholder="Введите пароль" name="password" style="width: 100%; padding: 10px; margin: 5px 0;">
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <input type="checkbox" id="remember" name="remember">
+                    <label for="remember">Запомнить меня</label>
+                </div>
+                <button type="submit" style="background: linear-gradient(90deg,#111827,#1b2430); color: white; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer;">Войти</button>
+            </form>
+        </div>
+        <p style="margin-top: 20px;">Нет аккаунта? <a href="{{ url_for('register') }}">Зарегистрируйтесь</a></p>
+    </main>
+</body>
+</html>

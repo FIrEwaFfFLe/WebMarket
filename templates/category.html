@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{{ category_name }}</title>
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/index_icon.ico') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <style>
+    .compare-bar {
+      padding: 12px 18px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      justify-content: space-between;
+      background: linear-gradient(180deg,#ffffff,#fbfdff);
+      border-radius: 12px;
+      box-shadow: 0 8px 26px rgba(2,6,23,0.04);
+      border: 1px solid rgba(0,0,0,0.04);
+    }
+    .compare-bar .left {
+      display:flex;
+      gap:12px;
+      align-items:center;
+      color:#0b1220;
+      font-weight:700;
+    }
+    .compare-bar .left .muted { font-weight:400; color:#6b7280; font-size:0.95rem; }
+    .compare-bar .actions { display:flex; gap:10px; align-items:center; }
+    .btn.primary { background: linear-gradient(90deg,#111827,#1b2430); color: white; padding:10px 14px; border-radius:10px; text-decoration:none; font-weight:800; box-shadow:0 10px 28px rgba(2,6,23,0.12); }
+    .btn.ghost { background:transparent; border:1px solid rgba(2,6,23,0.06); color:#111827; padding:8px 12px; border-radius:10px; font-weight:700; text-decoration:none; }
+
+    .apply-filters-btn {
+      background: linear-gradient(90deg,#111827,#1b2430);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .no-products {
+      text-align: center;
+      padding: 60px 20px;
+      color: #6b7280;
+      font-size: 1.1rem;
+      grid-column: 1 / -1;
+    }
+
+    /* СТИЛИ ДЛЯ GRID VIEW (КАРТОЧКИ) */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      justify-items: center;
+    }
+
+    .product-card {
+      width: 100%;
+      max-width: 300px;
+      min-height: 350px;
+      transition: all 0.3s ease;
+    }
+
+    /* СТИЛИ ДЛЯ LIST VIEW (СПИСОК) */
+    #view-list:checked ~ .product-grid {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    #view-list:checked ~ .product-grid .product-card {
+      max-width: 100%;
+      min-height: 120px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding: 15px;
+    }
+
+    #view-list:checked ~ .product-grid .card-image {
+      width: 100px;
+      height: 80px;
+      flex-shrink: 0;
+      margin-right: 20px;
+    }
+
+    #view-list:checked ~ .product-grid .card-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    #view-list:checked ~ .product-grid .card-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    #view-list:checked ~ .product-grid .product-title {
+      font-size: 1.1rem;
+      margin-bottom: 5px;
+    }
+
+    #view-list:checked ~ .product-grid .price {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    #view-list:checked ~ .product-grid .stock {
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+
+    /* СТИЛИ ДЛЯ ПЕРЕКЛЮЧАТЕЛЯ */
+    .view-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .toggle-track {
+      width: 44px;
+      height: 24px;
+      background: #e5e7eb;
+      border-radius: 12px;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .toggle-thumb {
+      width: 18px;
+      height: 18px;
+      background: white;
+      border-radius: 50%;
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      transition: all 0.3s ease;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+
+    #view-list:checked ~ .filters-top .toggle-track {
+      background: #4f46e5;
+    }
+
+    #view-list:checked ~ .filters-top .toggle-thumb {
+      transform: translateX(20px);
+    }
+
+    .toggle-label {
+      font-size: 0.9rem;
+      color: #6b7280;
+      font-weight: 500;
+    }
+
+    @media (max-width:900px) {
+      .compare-bar { flex-direction:column; align-items:stretch; gap:8px; padding:10px; margin:10px; }
+      .compare-bar .actions { justify-content:flex-end; }
+      .product-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      }
+    }
+
+    @media (max-width:600px) {
+      .product-grid {
+        grid-template-columns: 1fr;
+        justify-items: center;
+      }
+      .product-card {
+        max-width: 100%;
+      }
+      #view-list:checked ~ .product-grid .product-card {
+        flex-direction: column;
+        text-align: center;
+        min-height: auto;
+        padding: 20px;
+      }
+      #view-list:checked ~ .product-grid .card-image {
+        width: 100%;
+        height: 150px;
+        margin-right: 0;
+        margin-bottom: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="category-header {{ category_id }}-header" role="banner">
+    <div class="header-inner">
+      <a class="logo small" href="{{ url_for('index') }}" aria-label="EliteDrive — на главную">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="EliteDrive Logo" class="logo-img">
+        <strong class="logo-text">EliteDrive</strong>
+      </a>
+      <h1 class="category-title" aria-live="polite">{{ category_icon }} {{ category_name }}</h1>
+    </div>
+  </header>
+
+  <main class="category-main" role="main">
+    <input id="view-list" type="checkbox" style="display:none;">
+
+    <form id="filters-form" method="GET" action="{{ url_for('create_category_page', category=category_id) }}">
+      <div class="filters-top" aria-label="Фильтры и сортировка">
+        <div class="filters" role="region" aria-labelledby="filters-heading">
+          <div style="flex:1;">
+            <h2 id="filters-heading" style="margin:0 0 8px; font-size:1rem; color:#0f172a;">Фильтры</h2>
+          </div>
+
+          <div class="filter-group">
+            <label>Цена</label>
+            <div class="price-range" role="group" aria-label="Диапазоны цен">
+              {% if category_id == 'supercars' %}
+                <button type="button" class="price-btn" data-min="0" data-max="300000">до 300k $</button>
+                <button type="button" class="price-btn" data-min="300000" data-max="600000">300k–600k $</button>
+                <button type="button" class="price-btn" data-min="600000" data-max="10000000">600k+</button>
+              {% elif category_id == 'sportscars' %}
+                <button type="button" class="price-btn" data-min="0" data-max="60000">до 60k $</button>
+                <button type="button" class="price-btn" data-min="60000" data-max="120000">60k–120k $</button>
+                <button type="button" class="price-btn" data-min="120000" data-max="1000000">120k+</button>
+              {% elif category_id == 'motorcycles' %}
+                <button type="button" class="price-btn" data-min="0" data-max="15000">до 15k $</button>
+                <button type="button" class="price-btn" data-min="15000" data-max="30000">15k–30k $</button>
+                <button type="button" class="price-btn" data-min="30000" data-max="500000">30k+</button>
+              {% endif %}
+            </div>
+            <input type="hidden" id="min_price" name="min_price" value="{{ request.args.get('min_price', '') }}">
+            <input type="hidden" id="max_price" name="max_price" value="{{ request.args.get('max_price', '') }}">
+          </div>
+
+          <div class="filter-group">
+            <label>Бренды</label>
+            <div class="brands" role="group" aria-label="Бренды">
+              {% if category_id == 'supercars' %}
+                <label class="brand">
+                  <input type="checkbox" name="brand" value="Ferrari" {% if 'Ferrari' in request.args.getlist('brand') %}checked{% endif %}> Ferrari
+                </label>
+                <label class="brand">
+                  <input type="checkbox" name="brand" value="Lamborghini" {% if 'Lamborghini' in request.args.getlist('brand') %}checked{% endif %}> Lamborghini
+                </label>
+                <label class="brand">
+                  <input type="checkbox" name="brand" value="McLaren" {% if 'McLaren' in request.args.getlist('brand') %}checked{% endif %}> McLaren
+                </label>
+              {% elif category_id == 'sportscars' %}
+                <label class="brand">
+                  <input type="checkbox" name="brand" value="Porsche" {% if 'Porsche' in request.args.getlist('brand') %}checked{% endif %}> Porsche
+                </label>
+                <label class="brand">
+                  <input type="checkbox" name="brand" value="BMW" {% if 'BMW' in request.args.getlist('brand') %}checked{% endif %}> BMW
+                </label>
+                <label class="brand">
+                  <input type="checkbox" name="brand" value="Toyota" {% if 'Toyota' in request.args.getlist('brand') %}checked{% endif %}> Toyota
+                </label>
+                <label class="brand">
+                  <input type="checkbox" name="brand" value="Chevrolet" {% if 'Chevrolet' in request.args.getlist('brand') %}checked{% endif %}> Chevrolet
+                </label>
+              {% elif category_id == 'motorcycles' %}
+                <label class="brand">
+                  <input type="checkbox" name="brand" value="Ducati" {% if 'Ducati' in request.args.getlist('brand') %}checked{% endif %}> Ducati
+                </label>
+                <label class="brand">
+                  <input type="checkbox" name="brand" value="BMW" {% if 'BMW' in request.args.getlist('brand') %}checked{% endif %}> BMW
+                </label>
+                <label class="brand">
+                  <input type="checkbox" name="brand" value="Kawasaki" {% if 'Kawasaki' in request.args.getlist('brand') %}checked{% endif %}> Kawasaki
+                </label>
+                <label class="brand">
+                  <input type="checkbox" name="brand" value="Yamaha" {% if 'Yamaha' in request.args.getlist('brand') %}checked{% endif %}> Yamaha
+                </label>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <label>Рейтинг</label>
+            <div class="rating-filter" aria-hidden="true">★★★★★</div>
+          </div>
+
+          <div class="filter-group">
+            <label>Сортировка</label>
+            <div class="select-wrap" aria-hidden="false">
+              <select aria-label="Сортировка">
+                <option>Популярные</option>
+                <option>Новинки</option>
+                <option>Цена ↑</option>
+                <option>Цена ↓</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="margin-left:auto; display:flex; align-items:center; gap:12px;">
+            <div class="muted" style="font-weight:700;">Найдено: <span id="results-count-2">{{ products|length }}</span></div>
+            <div class="view-toggle" title="Переключить вид">
+              <label for="view-list" class="toggle" role="switch" aria-checked="false">
+                <span class="toggle-track">
+                  <span class="toggle-thumb"></span>
+                </span>
+                <span class="toggle-label">Список</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div class="compare-bar" role="region" aria-label="Панель сравнения">
+      <div class="left">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <strong>Показаны:</strong>
+          <span class="muted">{{ products|length }} товара</span>
+        </div>
+      </div>
+      <div class="actions">
+        <a href="{{ url_for('compare_category', category=category_id) }}" class="btn primary" role="button" aria-label="Сравнить все товары">Сравнить все товары</a>
+        <button type="submit" form="filters-form" class="btn primary">Применить фильтр</button>
+        <a href="{{ url_for('create_category_page', category=category_id) }}" class="btn ghost" role="button" aria-label="Сбросить фильтры">Сбросить фильтры</a>
+      </div>
+    </div>
+
+    <section id="product-grid" class="product-grid" aria-label="Товары категории {{ category_name }}">
+      {% set filtered_products = [] %}
+      
+      {% for product in products %}
+        {% set show_product = true %}
+        
+        {# Фильтрация по цене #}
+        {% if request.args.get('min_price') %}
+          {% if product.price < request.args.get('min_price')|int %}
+            {% set show_product = false %}
+          {% endif %}
+        {% endif %}
+        {% if request.args.get('max_price') %}
+          {% if product.price > request.args.get('max_price')|int %}
+            {% set show_product = false %}
+          {% endif %}
+        {% endif %}
+        
+        {# Фильтрация по брендам #}
+        {% if request.args.getlist('brand') %}
+          {% if product.brand not in request.args.getlist('brand') %}
+            {% set show_product = false %}
+          {% endif %}
+        {% endif %}
+        
+        {% if show_product %}
+          {% set _ = filtered_products.append(product) %}
+        {% endif %}
+      {% endfor %}
+
+      {% if filtered_products %}
+        {% for product in filtered_products %}
+        <a class="product-card {% if product.bestseller == 1 %}bestseller{% endif %}" href="{{ url_for('product_detail', product_id=product.id) }}" aria-label="{{ product.name }} — посмотреть">
+          <div class="card-image"><img src="{{ url_for('static', filename='images/' + product.images[0]) }}" alt="{{ product.name }}"></div>
+          <div class="card-body">
+            <h3 class="product-title">{{ product.name }}</h3>
+            <p class="price">${{ "{:,}".format(product.price) }}</p>
+            <p class="stock">Осталось: {{ product.stock }}</p>
+          </div>
+        </a>
+        {% endfor %}
+      {% else %}
+        <div class="no-products">
+          <p>По выбранным фильтрам товары не найдены</p>
+          <a href="{{ url_for('create_category_page', category=category_id) }}" class="btn primary" style="margin-top: 16px;">Сбросить фильтры</a>
+        </div>
+      {% endif %}
+    </section>
+
+    <nav class="pagination" aria-label="Пагинация товаров">
+      <a href="#" class="page prev" aria-label="Предыдущая страница">◀</a>
+      <a href="#" class="page active" aria-current="page">1</a>
+      <a href="#" class="page">2</a>
+      <a href="#" class="page next" aria-label="Следующая страница">▶</a>
+    </nav>
+  </main>
+
+  <footer class="site-footer minimal" role="contentinfo">
+    <div class="footer-inner">
+      <a href="{{ url_for('index') }}" style="color:inherit; text-decoration:none;">← на главную</a>
+      <p class="author" style="margin:0 0 0 12px; color:#9aa1b2;">© 2025 EliteDrive — разработчик: Кузнецов Дмитрий</p>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.price-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.getElementById('min_price').value = this.dataset.min;
+          document.getElementById('max_price').value = this.dataset.max;
+          document.getElementById('filters-form').submit();
+        });
+      });
+
+      const viewListCheckbox = document.getElementById('view-list');
+      const toggleLabel = document.querySelector('.toggle');
+      
+      viewListCheckbox.addEventListener('change', function() {
+        toggleLabel.setAttribute('aria-checked', this.checked);
+      });
+    });
+  </script>
+</body>
+</html>

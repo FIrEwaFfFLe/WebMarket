@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Регистрация успешна - EliteDrive</title>
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/index_icon.ico') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <style>
+    .success-container {
+      max-width: 500px;
+      margin: 80px auto;
+      padding: 0 20px;
+      text-align: center;
+    }
+    
+    .success-card {
+      background: white;
+      padding: 48px 32px;
+      border-radius: 16px;
+      box-shadow: 0 12px 36px rgba(2,6,23,0.08);
+      border: 1px solid rgba(0,0,0,0.04);
+    }
+    
+    .success-icon {
+      font-size: 4rem;
+      margin-bottom: 20px;
+    }
+    
+    .success-title {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0 0 16px 0;
+    }
+    
+    .success-message {
+      color: #64748b;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+    
+    .btn-success {
+      display: inline-block;
+      padding: 14px 32px;
+      background: linear-gradient(90deg, #111827, #1b2430);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .btn-success:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 20px rgba(2,6,23,0.15);
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header" style="background: transparent; box-shadow: none;">
+    <div class="header-inner">
+      <a class="logo" href="{{ url_for('index') }}">
+        <img src="{{ url_for('static', filename='images/logo-negate.png') }}" alt="EliteDrive Logo" class="logo-img">
+        <strong class="logo-text">EliteDrive</strong>
+      </a>
+    </div>
+  </header>
+
+  <main class="success-container">
+    <div class="success-card">
+      <div class="success-icon">🎉</div>
+      <h1 class="success-title">Регистрация успешна!</h1>
+      <p class="success-message">
+        Ваш аккаунт был успешно создан. Теперь вы можете войти в систему и начать пользоваться всеми возможностями EliteDrive.
+      </p>
+      <a href="{{ url_for('login') }}" class="btn-success">Войти в аккаунт</a>
+    </div>
+  </main>
+</body>
+</html>

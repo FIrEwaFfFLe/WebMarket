@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Сравнение {{ category_name }}</title>
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/index_icon.ico') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <style>
+    .compare-category-page {
+      max-width: 1200px;
+      margin: 28px auto;
+      padding: 0 18px 40px;
+    }
+
+    .compare-title {
+      text-align: center;
+      font-size: 1.8rem;
+      margin: 8px 0 20px;
+      font-weight: 800;
+      color: #0b1220;
+    }
+
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 26px rgba(2,6,23,0.04);
+      background: white;
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+      padding: 16px;
+      text-align: left;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .comparison-table th {
+      background: linear-gradient(180deg,#ffffff,#fbfdff);
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .comparison-table tr:nth-child(even) {
+      background: rgba(250,250,250,0.6);
+    }
+
+    .product-header {
+      text-align: center;
+      background: linear-gradient(180deg,#fff9ec,#fff7e6);
+    }
+
+    .product-header img {
+      width: 120px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    .product-name {
+      font-weight: 800;
+      font-size: 1.1rem;
+      margin: 8px 0;
+    }
+
+    .product-price {
+      font-weight: 900;
+      font-size: 1.2rem;
+      color: #0b7;
+      margin: 8px 0;
+    }
+
+    .spec-name {
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .spec-value {
+      color: #111827;
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header" style="background:transparent; box-shadow:none; padding-top:22px;">
+    <div class="header-inner">
+      <a class="logo" href="{{ url_for('index') }}" aria-label="EliteDrive — на главную">
+        <img src="{{ url_for('static', filename='images/logo-negate.png') }}" alt="EliteDrive Logo" class="logo-img" style="height:46px;">
+        <strong class="logo-text">EliteDrive</strong>
+      </a>
+    </div>
+  </header>
+
+  <main class="compare-category-page" role="main" aria-labelledby="compare-title">
+    <h1 id="compare-title" class="compare-title">Сравнение — {{ category_name }}</h1>
+
+    <table class="comparison-table" role="table" aria-label="Таблица сравнения {{ category_name }}">
+      <thead>
+        <tr>
+          <th scope="col">Параметр</th>
+          {% for product in products %}
+          <th scope="col" class="product-header">
+            <img src="{{ url_for('static', filename='images/' + product.images[0]) }}" alt="{{ product.name }}">
+            <div class="product-name">{{ product.name }}</div>
+            <div class="product-price">${{ "{:,}".format(product.price) }}</div>
+          </th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="spec-name">Наличие</td>
+          {% for product in products %}
+          <td class="spec-value">В наличии: {{ product.stock }} шт.</td>
+          {% endfor %}
+        </tr>
+        
+        {% for spec in all_specs %}
+        <tr>
+          <td class="spec-name">{{ spec }}</td>
+          {% for product in products %}
+          <td class="spec-value">
+            {% if product.specs and spec in product.specs %}
+              {{ product.specs[spec] }}
+            {% else %}
+              —
+            {% endif %}
+          </td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+        
+        <tr>
+          <td class="spec-name">Действия</td>
+          {% for product in products %}
+          <td>
+            <a href="{{ url_for('product_detail', product_id=product.id) }}" class="btn primary" style="padding: 8px 12px; font-size: 0.9rem;">Подробнее</a>
+          </td>
+          {% endfor %}
+        </tr>
+      </tbody>
+    </table>
+  </main>
+
+  <footer class="site-footer minimal" role="contentinfo" style="margin-top:36px;">
+    <div class="footer-inner">
+      <a href="{{ url_for('create_category_page', category=category) }}" style="color:inherit; text-decoration:none;">← в категорию {{ category_name }}</a>
+      <p class="author" style="margin:0 0 0 12px; color:#9aa1b2;">© 2025 EliteDrive — разработчик: Кузнецов Дмитрий</p>
+    </div>
+  </footer>
+</body>
+</html>

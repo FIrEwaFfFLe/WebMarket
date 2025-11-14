@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Добавить товар - EliteDrive</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/index_icon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-inner">
+            <a class="logo" href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="EliteDrive Logo" class="logo-img">
+                <strong class="logo-text">EliteDrive</strong>
+            </a>
+        </div>
+    </header>
+
+    <main style="max-width: 600px; margin: 40px auto; padding: 0 20px;">
+        <h1>Добавить новый товар</h1>
+        <div>
+            <form class="product_form" method="post">
+                <div style="margin-bottom: 15px;">
+                    <label for="id">ID товара:</label>
+                    <input type="text" id="id" name="id" placeholder="Уникальный идентификатор" style="width: 100%; padding: 10px; margin: 5px 0;" required>
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                    <label for="name">Название товара:</label>
+                    <input type="text" id="name" name="name" placeholder="Название товара" style="width: 100%; padding: 10px; margin: 5px 0;" required>
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                    <label for="category">Категория:</label>
+                    <select id="category" name="category" style="width: 100%; padding: 10px; margin: 5px 0;">
+                        <option value="supercars">Суперкары</option>
+                        <option value="sportscars">Спорт-кары</option>
+                        <option value="motorcycles">Мотоциклы</option>
+                    </select>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label for="brand">Бренд:</label>
+                    <input type="text" id="brand" name="brand" placeholder="Название бренда" style="width: 100%; padding: 10px; margin: 5px 0;">
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                    <label for="price">Цена ($):</label>
+                    <input type="number" id="price" name="price" placeholder="Цена в долларах" style="width: 100%; padding: 10px; margin: 5px 0;" required>
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                    <label for="stock">Количество в наличии:</label>
+                    <input type="number" id="stock" name="stock" placeholder="Количество" style="width: 100%; padding: 10px; margin: 5px 0;" required>
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                    <label for="power">Мощность:</label>
+                    <input type="text" id="power" name="power" placeholder="Например: 500 л.с." style="width: 100%; padding: 10px; margin: 5px 0;">
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                    <label for="acceleration">Разгон 0-100 км/ч:</label>
+                    <input type="text" id="acceleration" name="acceleration" placeholder="Например: 3.5 сек" style="width: 100%; padding: 10px; margin: 5px 0;">
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                    <label for="type">Тип:</label>
+                    <input type="text" id="type" name="type" placeholder="Например: купе, супербайк" style="width: 100%; padding: 10px; margin: 5px 0;">
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                    <label for="description">Описание товара:</label>
+                    <textarea id="description" name="description" placeholder="Подробное описание товара" style="width: 100%; padding: 10px; margin: 5px 0; height: 100px;"></textarea>
+                </div>
+                
+                <button type="submit" style="background: linear-gradient(90deg,#111827,#1b2430); color: white; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer;">Создать товар</button>
+            </form>
+        </div>
+    </main>
+</body>
+</html>

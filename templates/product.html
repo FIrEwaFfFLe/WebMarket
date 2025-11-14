@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{{ product.name }}</title>
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/index_icon.ico') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <style>
+    .product-main.product-single { flex-direction: column; gap: 28px; padding: 28px 20px; min-width: 1200px; max-width:1200px; margin:20px auto; }
+    .product-hero {
+      border-radius: 14px;
+      padding: 22px;
+      background:
+        linear-gradient(rgba(255,255,255,0.86), rgba(255,255,255,0.92)),
+        url("{{ url_for('static', filename='images/tech-pattern.jpg') }}");
+      background-repeat: repeat;
+      background-size: 320px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 12px 36px rgba(2,6,23,0.08);
+    }
+    .product-single .gallery-slides { height: 480px; }
+    .gallery-dots { gap: 10px; margin-top: 14px; }
+    .dot { width:14px; height:14px; border-radius:50%; border-width:2px; }
+    .product-meta { display:block; margin-top:18px; }
+    .product-actions { display:flex; gap:12px; margin-top:12px; flex-wrap:wrap; }
+    .btn.primary { background: linear-gradient(90deg,#111827,#1b2430); color: white; padding:12px 16px; border-radius:10px; text-decoration:none; font-weight:800; box-shadow:0 10px 28px rgba(2,6,23,0.12); }
+    .btn.ghost { background:transparent; border:1px solid rgba(2,6,23,0.06); color:#111827; padding:10px 14px; border-radius:10px; font-weight:700; text-decoration:none; }
+    .reviews { margin-top:18px; display:grid; gap:12px; }
+    .review { background:white; padding:14px; border-radius:10px; box-shadow:0 8px 22px rgba(2,6,23,0.04); }
+    .review .meta { display:flex; justify-content:space-between; gap:12px; align-items:center; margin-bottom:8px; }
+    .stars { color:#ffb703; font-weight:800; letter-spacing:1px; }
+    .gallery-and-meta { display:grid; grid-template-columns: 1fr; gap:16px; }
+    @media(min-width:1100px) {
+      .gallery-and-meta { grid-template-columns: 1fr 420px; align-items:start; }
+      .product-single .gallery-slides { height:520px; }
+    }
+    .laser-title.product-name { font-size:1.6rem; margin:0; }
+  </style>
+</head>
+<body>
+  <header class="category-header supercars-header" role="banner">
+    <div class="header-inner">
+      <a class="logo small" href="{{ url_for('index') }}" aria-label="EliteDrive — на главную">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="EliteDrive Logo" class="logo-img">
+        <strong class="logo-text">EliteDrive</strong>
+      </a>
+
+      <h1 class="category-title" aria-live="polite">Карточка товара</h1>
+    </div>
+  </header>
+
+  <main class="product-main product-single" role="main" aria-label="Карточка товара {{ product.name }}">
+    <nav aria-label="Хлебные крошки" class="muted" style="font-size:0.95rem;">
+      <a href="{{ url_for('index') }}">Главная</a> ›
+      <a href="{{ url_for('create_category_page', category=category_url.split('.')[0]) }}">{{ category_name }}</a> ›
+      <span aria-current="page">{{ product.name }}</span>
+    </nav>
+
+    <section class="product-hero" aria-labelledby="product-title">
+      <div class="gallery-and-meta">
+        <div class="gallery" role="region" aria-label="Галерея изображений {{ product.name }}">
+          {% for i in range(product.images|length) %}
+          <input id="g{{ i+1 }}" name="gallery" type="radio" {% if loop.first %}checked{% endif %}>
+          {% endfor %}
+
+          <div class="gallery-slides" aria-live="polite">
+            {% for image in product.images %}
+            <div class="gslide g{{ loop.index }}">
+              <img src="{{ url_for('static', filename='images/' + image) }}" alt="{{ product.name }} — изображение {{ loop.index }}" />
+            </div>
+            {% endfor %}
+          </div>
+
+          <div class="gallery-dots" role="tablist" aria-label="Выбор изображения">
+            {% for i in range(product.images|length) %}
+            <label class="dot" for="g{{ i+1 }}" aria-label="Изображение {{ i+1 }}"> </label>
+            {% endfor %}
+          </div>
+        </div>
+
+        <aside class="product-info" role="complementary" aria-labelledby="product-title">
+          <h2 id="product-title" class="laser-title product-name">{{ product.name }}</h2>
+
+          <p class="price-big" aria-label="Цена">${{ "{:,}".format(product.price) }}</p>
+          <p class="muted" style="margin-top:0.25rem;">Осталось: <strong>{{ product.stock }}</strong></p>
+
+          <div class="product-meta">
+            <p style="margin:12px 0; line-height:1.5;">
+              {{ product.description }}
+            </p>
+
+            <ul class="custom-list" style="margin:0 0 8px;">
+              {% for key, value in product.specs.items() %}
+              <li>{{ key|capitalize }}: {{ value }}</li>
+              {% endfor %}
+            </ul>
+
+            <div class="product-actions" role="group" aria-label="Действия с товаром">
+              <a href="#" class="btn primary" role="button">Купить</a>
+              <a href="#" class="btn ghost" role="button">Добавить в избранное</a>
+              <a href="#reviews" class="btn ghost" role="link">Читать отзывы ({{ product.reviews|length }})</a>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+    </section>
+
+    <section class="form-card" aria-labelledby="details-heading">
+      <h3 id="details-heading" style="margin-top:0;">Подробное описание</h3>
+      <p style="margin:8px 0 0; line-height:1.6;">
+        {{ product.description }}
+      </p>
+    </section>
+
+    <section id="reviews" class="reviews" aria-labelledby="reviews-heading">
+      <h3 id="reviews-heading" style="margin:0 0 6px 0;">Отзывы покупателей</h3>
+
+      {% for review in product.reviews %}
+      <article class="review" role="article" aria-label="Отзыв от {{ review.author.split(',')[0] }}">
+        <div class="meta">
+          <div>
+            <strong>{{ review.author }}</strong>
+            <div class="muted" style="font-size:0.9rem;">{{ review.date }}</div>
+          </div>
+          <div class="stars" aria-hidden="true">{{ "★" * review.rating }}{{ "☆" * (5-review.rating) }}</div>
+        </div>
+        <p style="margin:0;">{{ review.text }}</p>
+      </article>
+      {% endfor %}
+
+      <div style="margin-top:6px;">
+        <a href="{{ url_for('profile') }}" class="btn primary">Связаться с продавцом</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer minimal" role="contentinfo">
+    <div class="footer-inner">
+      <a href="{{ url_for('create_category_page', category=category_url.split('.')[0]) }}" style="color:inherit; text-decoration:none;">← в категорию {{ category_name }}</a>
+      <p class="author" style="margin:0 0 0 12px; color:#9aa1b2;">© 2025 EliteDrive — разработчик: Кузнецов Дмитрий</p>
+    </div>
+  </footer>
+</body>
+</html>
