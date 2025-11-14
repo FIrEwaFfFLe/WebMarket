@@ -1,0 +1,10 @@
+id: moto-1
+name: Ducati Panigale V4
+category: motorcycles
+price: 28000
+stock: 4
+images: bike1.jpg,ducati-2.png,ducati-3.jpg,ducati-4.jpg
+description: Итальянский супербайк — идеальное сочетание гоночных технологий и дорожной пригодности.
+specs: Мощность: ~214 л.с.|Разгон 0–100 км/ч: ~2.7 сек|Тип: спортивный супербайк
+bestseller: 1
+brand: Ducati

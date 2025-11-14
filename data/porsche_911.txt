@@ -1,0 +1,10 @@
+id: sportcar-1
+name: Porsche 911 Carrera
+category: sportscars
+price: 115000
+stock: 5
+images: sport1.avif,porsche-2.webp,porsche-3.webp,porsche-4.jpg
+description: Легенда в современном исполнении — Porsche 911 Carrera сочетает драйверский характер, высокую точность управления и премиальный комфорт.
+specs: Мощность: ~385 л.с.|Разгон 0–100 км/ч: ~4.2 сек|Кузов: купе/кабриолет
+bestseller: 1
+brand: Porsche

@@ -1,0 +1,10 @@
+id: sportcar-3
+name: BMW M4 Competition
+category: sportscars
+price: 78000
+stock: 2
+images: sport3.jpg
+description: Легендарный спортивный седан от BMW M Division. Агрессивный дизайн и передовые технологии управления.
+specs: Мощность: 510 л.с.|Разгон 0–100 км/ч: ~3.9 сек|Кузов: купе|Привод: задний
+bestseller: 0
+brand: BMW

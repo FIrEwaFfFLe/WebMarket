@@ -1,0 +1,10 @@
+id: moto-2
+name: BMW M 1000 RR
+category: motorcycles
+price: 40000
+stock: 1
+images: bike2.jpg
+description: Немецкий супербайк с технологиями из мира MotoGP. Высочайшая точность управления и экстремальная производительность.
+specs: Мощность: 212 л.с.|Разгон 0–100 км/ч: ~2.6 сек|Тип: спортивный супербайк|Вес: 192 кг
+bestseller: 0
+brand: BMW

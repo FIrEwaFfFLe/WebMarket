@@ -1,0 +1,10 @@
+id: sportcar-5
+name: Chevrolet Corvette C8
+category: sportscars
+price: 65000
+stock: 3
+images: sport5.avif
+description: Первый Corvette с центральным расположением двигателя. Американская классика в новом исполнении.
+specs: Мощность: 495 л.с.|Разгон 0–100 км/ч: ~2.9 сек|Кузов: купе|Расположение двигателя: центральное
+bestseller: 0
+brand: Chevrolet

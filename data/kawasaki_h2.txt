@@ -1,0 +1,10 @@
+id: moto-3
+name: Kawasaki Ninja H2
+category: motorcycles
+price: 35000
+stock: 1
+images: bike3.png
+description: Мотоцикл с механическим нагнетателем. Беспрецедентная мощность и футуристичный дизайн.
+specs: Мощность: 231 л.с.|Разгон 0–100 км/ч: ~2.6 сек|Тип: спортивный с нагнетателем|Нагнетатель: механический
+bestseller: 0
+brand: Kawasaki

@@ -1,0 +1,10 @@
+id: sportcar-2
+name: Porsche 718 Cayman
+category: sportscars
+price: 62000
+stock: 4
+images: sport2.jpeg
+description: Среднемоторный спортивный автомобиль с идеальной развесовкой. Прекрасная управляемость и характерный оппозитный двигатель.
+specs: Мощность: 300 л.с.|Разгон 0–100 км/ч: ~4.9 сек|Кузов: купе|Тип двигателя: оппозитный
+bestseller: 0
+brand: Porsche

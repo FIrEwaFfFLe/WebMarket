@@ -1,0 +1,10 @@
+id: supercar-3
+name: Ferrari 812 Superfast
+category: supercars
+price: 335000
+stock: 1
+images: super3.jpg
+description: Флагманский Gran Turismo от Ferrari с атмосферным двигателем V12. Идеальное сочетание роскоши, комфорта и невероятной мощности.
+specs: Мощность: 800 л.с.|Разгон 0–100 км/ч: ~2.9 сек|Кузов: купе|Объем двигателя: 6.5 л
+bestseller: 0
+brand: Ferrari

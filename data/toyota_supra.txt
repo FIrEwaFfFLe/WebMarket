@@ -1,0 +1,10 @@
+id: sportcar-4
+name: Toyota GR Supra
+category: sportscars
+price: 55000
+stock: 5
+images: sport4.jpg
+description: Возрождение легенды 90-х. Современные технологии и узнаваемый дизайн в лучших традициях Toyota.
+specs: Мощность: 340 л.с.|Разгон 0–100 км/ч: ~4.3 сек|Кузов: купе|Платформа: совместная с BMW
+bestseller: 0
+brand: Toyota

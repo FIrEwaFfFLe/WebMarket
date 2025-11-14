@@ -1,0 +1,10 @@
+id: moto-5
+name: Aprilia RSV4
+category: motorcycles
+price: 23000
+stock: 2
+images: bike5.jpg
+description: Итальянский супербайк с уникальным V4 двигателем. Агрессивный характер и гоночная ДНК.
+specs: Мощность: 217 л.с.|Разгон 0–100 км/ч: ~2.8 сек|Тип: спортивный супербайк|Двигатель: V4
+bestseller: 0
+brand: Aprilia

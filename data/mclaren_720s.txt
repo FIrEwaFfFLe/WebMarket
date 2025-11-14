@@ -1,0 +1,10 @@
+id: supercar-4
+name: McLaren 720S
+category: supercars
+price: 299000
+stock: 3
+images: super4.webp
+description: Британский суперкар с инновационной карбоновой платформой. Потрясающая управляемость и футуристичный дизайн.
+specs: Мощность: 720 л.с.|Разгон 0–100 км/ч: ~2.8 сек|Кузов: купе|Материал кузова: карбон
+bestseller: 0
+brand: McLaren

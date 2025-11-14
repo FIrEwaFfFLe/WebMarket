@@ -1,0 +1,10 @@
+id: supercar-2
+name: Lamborghini Aventador SVJ
+category: supercars
+price: 520000
+stock: 1
+images: super2.webp
+description: Легендарный суперкар с двигателем V12 и экстремальной аэродинамикой. Агрессивный дизайн и невероятная производительность делают его одним из самых желанных автомобилей в мире.
+specs: Мощность: 770 л.с.|Разгон 0–100 км/ч: ~2.8 сек|Кузов: купе|Максимальная скорость: 350 км/ч
+bestseller: 0
+brand: Lamborghini

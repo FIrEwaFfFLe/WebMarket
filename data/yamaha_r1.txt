@@ -1,0 +1,10 @@
+id: moto-4
+name: Yamaha YZF-R1
+category: motorcycles
+price: 21000
+stock: 4
+images: bike4.webp
+description: Легендарный японский супербайк с технологиями из MotoGP. Идеальный баланс мощности и управляемости.
+specs: Мощность: 200 л.с.|Разгон 0–100 км/ч: ~2.7 сек|Тип: спортивный супербайк|Электроника: полный пакет
+bestseller: 0
+brand: Yamaha
